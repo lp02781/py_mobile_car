@@ -2,7 +2,7 @@ import threading
 import serial
 import time
 
-bleSerial = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=1.0)
+bleSerial = serial.Serial("/dev/rfcomm0", baudrate=9600, timeout=1.0)
 
 
 def serial_thread():

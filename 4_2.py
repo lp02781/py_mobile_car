@@ -1,6 +1,6 @@
 import serial
 
-bleSerial = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=1.0)
+bleSerial = serial.Serial("/dev/rfcomm0", baudrate=9600, timeout=1.0)
 
 try:
     while True:
