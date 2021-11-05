@@ -5,6 +5,7 @@ import RPi.GPIO as GPIO
 
 bleSerial = serial.Serial("/dev/rfcomm0", baudrate=9600, timeout=1.0)
 
+
 gData = ""
 
 SW1 = 5
