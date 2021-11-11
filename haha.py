@@ -3,7 +3,7 @@ import serial
 import time
 import RPi.GPIO as GPIO
 
-bleSerial = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=1.0)
+bleSerial = serial.Serial("/dev/rfcomm0", baudrate=9600, timeout=1.0)
 
 gData = ""
 
@@ -192,42 +192,59 @@ def led_off():
     GPIO.output(LED2,GPIO.LOW)
     GPIO.output(LED3,GPIO.LOW)
     GPIO.output(LED4,GPIO.LOW)
+    p.stop()
 
 def led_front():
     GPIO.output(LED1,GPIO.HIGH)
     GPIO.output(LED2,GPIO.HIGH)
     GPIO.output(LED3,GPIO.LOW)
     GPIO.output(LED4,GPIO.LOW)
-    time.sleep(0.5)
+    p.start(50)
+    p.ChangeFrequency(261)
+    time.sleep(1)
+    
     led_off()
-    time.sleep(0.5)
+    p.stop()
+    time.sleep(1)
 
 def led_back():
     GPIO.output(LED1,GPIO.LOW)
     GPIO.output(LED2,GPIO.LOW)
     GPIO.output(LED3,GPIO.HIGH)
     GPIO.output(LED4,GPIO.HIGH)
-    time.sleep(0.5)
+    p.start(50)
+    p.ChangeFrequency(261)
+    time.sleep(1)
+    
     led_off()
-    time.sleep(0.5)
+    p.stop()
+    time.sleep(1)
 
 def led_left():
     GPIO.output(LED1,GPIO.HIGH)
     GPIO.output(LED2,GPIO.LOW)
     GPIO.output(LED3,GPIO.HIGH)
     GPIO.output(LED4,GPIO.LOW)
-    time.sleep(0.5)
+    p.start(50)
+    p.ChangeFrequency(261)
+    time.sleep(1)
+    
     led_off()
-    time.sleep(0.5)
+    p.stop()
+    time.sleep(1)
 
 def led_right():
     GPIO.output(LED1,GPIO.LOW)
     GPIO.output(LED2,GPIO.HIGH)
     GPIO.output(LED3,GPIO.LOW)
     GPIO.output(LED4,GPIO.HIGH)
-    time.sleep(0.5)
+    p.start(50)
+    p.ChangeFrequency(261)
+    time.sleep(1)
+    
     led_off()
-    time.sleep(0.5)
+    p.stop()
+    time.sleep(1)
 
 def led_stop():
     GPIO.output(LED1,GPIO.LOW)
@@ -236,43 +253,43 @@ def led_stop():
     GPIO.output(LED4,GPIO.LOW)
 
 def motor_go(speed):
-    GPIO.output(AIN1,0)
-    GPIO.output(AIN2,1)
-    L_Motor.ChangeDutyCycle(speed)
-    GPIO.output(BIN1,0)
-    GPIO.output(BIN2,1)
-    R_Motor.ChangeDutyCycle(speed)
-
-def motor_back(speed):
     GPIO.output(AIN1,1)
     GPIO.output(AIN2,0)
     L_Motor.ChangeDutyCycle(speed)
     GPIO.output(BIN1,1)
     GPIO.output(BIN2,0)
     R_Motor.ChangeDutyCycle(speed)
-    
-def motor_left(speed):
-    GPIO.output(AIN1,1)
-    GPIO.output(AIN2,0)
+
+def motor_back(speed):
+    GPIO.output(AIN1,0)
+    GPIO.output(AIN2,1)
     L_Motor.ChangeDutyCycle(speed)
     GPIO.output(BIN1,0)
     GPIO.output(BIN2,1)
+    R_Motor.ChangeDutyCycle(speed)
+    
+def motor_left(speed):
+    GPIO.output(AIN1,0)
+    GPIO.output(AIN2,1)
+    L_Motor.ChangeDutyCycle(speed)
+    GPIO.output(BIN1,1)
+    GPIO.output(BIN2,0)
     R_Motor.ChangeDutyCycle(speed)
     
 def motor_right(speed):
-    GPIO.output(AIN1,0)
-    GPIO.output(AIN2,1)
+    GPIO.output(AIN1,1)
+    GPIO.output(AIN2,0)
     L_Motor.ChangeDutyCycle(speed)
-    GPIO.output(BIN1,1)
-    GPIO.output(BIN2,0)
+    GPIO.output(BIN1,0)
+    GPIO.output(BIN2,1)
     R_Motor.ChangeDutyCycle(speed)
 
 def motor_stop():
-    GPIO.output(AIN1,0)
-    GPIO.output(AIN2,1)
+    GPIO.output(AIN1,1)
+    GPIO.output(AIN2,0)
     L_Motor.ChangeDutyCycle(0)
-    GPIO.output(BIN1,0)
-    GPIO.output(BIN2,1)
+    GPIO.output(BIN1,1)
+    GPIO.output(BIN2,0)
     R_Motor.ChangeDutyCycle(0)
 
 def serial_thread():
@@ -317,9 +334,9 @@ def main():
 
 if __name__ == '__main__':
     task1 = threading.Thread(target = serial_thread)
-    task2 = threading.Thread(target = playsong(song2))
+    #task2 = threading.Thread(target = playsong(song2))
     task1.start()
-    task2.start()
+    #task2.start()
     main()
     bleSerial.close()
     GPIO.cleanup()
